@@ -13,6 +13,16 @@
 #include "all.h"
 
 /*
+** Generate a random number 
+*/
+int			get_rand(int max)
+{
+	struct timeval time;
+	syscall(AUE_GETTIMEOFDAY, &time);
+	return (time.tv_usec % max);
+}
+
+/*
 ** Allocate size from a file descriptor
 */
 void		*ft_mmap(int fd, size_t size)

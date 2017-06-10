@@ -17,11 +17,12 @@
 */
 static void         save_executable(void *buffer, t_elf *elf)
 {
-	int			fd = open("woody", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH);
+	int			fd = open("woody", O_RDWR|O_CREAT, 0777);
 	if (fd != -1)
 	{
 		if ((write(fd, buffer, elf->len)) == -1)
 			print_error(strerror(errno), true);
+        printf("Woody Woodpecker is telling you: the file was encrypted successfully to executable woody !\n");
 	}
 	else
 		print_error(strerror(errno), true);
@@ -112,8 +113,9 @@ static void         write_custom_section_header(void *buffer, t_elf *dst, int se
         return;
     section_header->sh_offset = section_offset;
     section_header->sh_size = src->len;
-    printf("Offset set: %d, size set: %d\n", section_header->sh_offset, section_header->sh_size);
-    ft_memcpy(buffer + (dst->len - sizeof(struct elf64_shdr)), section_header, sizeof(struct elf64_shdr));
+    //printf("Offset set: %d, size set: %d\n", section_header->sh_offset, section_header->sh_size);
+    ft_memcpy(buffer + (dst->len - sizeof(struct elf64_shdr) - ENCRYPTION_KEY_LEN),
+    section_header, sizeof(struct elf64_shdr));
 }
 
 /*
@@ -124,9 +126,10 @@ void                write_elf(t_elf *dst, t_elf* src)
     void        *buffer = NULL;
     int          offset_new_section = 0;
 
-    dst->len += src->len + sizeof(struct elf64_shdr);
+    dst->len += src->len + sizeof(struct elf64_shdr) + ENCRYPTION_KEY_LEN;
     if (!(buffer = (void*)malloc(dst->len)))
         return ;
+    encrypt_src(buffer, dst, src);
     dst->header->e_shoff += src->len;
     write_elf_header(buffer, dst);
     write_segments(buffer, dst);

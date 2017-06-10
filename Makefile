@@ -19,7 +19,7 @@ MAX_COLS	=	$$(echo "$$(tput cols)-24-$(LENGTHNAME)"|bc)
 
 CC			=	gcc -ggdb
 #FLAGS		=	-Wall -Wextra -Werror
-FLAGS		=
+FLAGS		= -Wno-deprecated
 FLAGS_O		=
 
 SRCDIR_WOODY		=	srcs/
@@ -34,7 +34,8 @@ SRCBASE_WOODY	=	\
 					utils.c			\
 					elf.c			\
 					elf_reader.c	\
-					elf_writer.c
+					elf_writer.c	\
+					encryption.c
 INCS			=	$(addprefix $(INCDIR), $(INCBASE))
 
 SRCS_WOODY			=	$(addprefix $(SRCDIR_WOODY), $(SRCBASE_WOODY))

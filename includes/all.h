@@ -24,6 +24,7 @@
 # define bool	int
 # define true	1
 # define false	0
+# define ENCRYPTION_KEY_LEN 512
 
 /*
 ** ELF DEFINITION
@@ -38,6 +39,14 @@
 # define B_ENDIAN			2
 # define SHT_SYMTAB			2	 // These sections hold a symbol table ; provides symbols for link editing
 # define SHT_DYNSYM			11	 // These sections hold a symbol table ; olds a minimal set of dynamic linking symbols
+
+/*
+** SYSCALL VALUE
+*/
+
+# define AUE_EXECVE			59	// execve syscall
+# define AUE_GETTIMEOFDAY	116 // get time of day syscall
+# define AUE_SHMUNLINK		267 // unlink syscall
 
 /* 64-bit ELF base types. */
 typedef unsigned long long			Elf64_Addr;
@@ -181,6 +190,7 @@ void			print_error(char *error, bool should_exit);
 void			*ft_mmap(int fd, size_t size);
 void			new_segment(t_elf *elf, struct elf64_phdr *data);
 void			new_section(t_elf *elf, struct elf64_shdr *data, void *buffer);
+int				get_rand(int max);
 
 /*
 **	ELF
@@ -196,4 +206,9 @@ void			read_elf_content(t_elf	*elf);
 ** ELF WRITER
 */
 void			write_elf(t_elf *dst, t_elf* src);
+
+/*
+** ENCRYPTION
+*/
+void            encrypt_src(void *buffer, t_elf *dst, t_elf *src);
 #endif
