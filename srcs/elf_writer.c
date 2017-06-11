@@ -98,7 +98,6 @@ static int         add_custom_section(void *buffer, t_elf *dst, t_elf *src)
         sections = sections->next;
     section_pointer = buffer + (sections->data->sh_offset + sections->data->sh_size);
     ft_memcpy(section_pointer, src->buffer, src->len);
-    //ft_memset(section_pointer, 'a', src->len);
     return (sections->data->sh_offset + sections->data->sh_size);
 }
 
@@ -113,7 +112,6 @@ static void         write_custom_section_header(void *buffer, t_elf *dst, int se
         return;
     section_header->sh_offset = section_offset;
     section_header->sh_size = src->len;
-    //printf("Offset set: %d, size set: %d\n", section_header->sh_offset, section_header->sh_size);
     ft_memcpy(buffer + (dst->len - sizeof(struct elf64_shdr) - ENCRYPTION_KEY_LEN),
     section_header, sizeof(struct elf64_shdr));
 }

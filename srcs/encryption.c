@@ -12,57 +12,32 @@
 
 #include "all.h"
 
-/*static char		*xor_char(int i, char c)
+/*
+** Apply xor on a char
+*/
+static char		xor_char(int i, char c, char *key)
 {
-	char *ret;
-
-	ret = int_to_hexastring(c ^ ENCRYPTION_KEY[i % ft_strlen(ENCRYPTION_KEY)]);
-	return (ret);
+	return (c ^ key[i % ENCRYPTION_KEY_LEN]);
 }
 
-static char		*unxor_char(int i, char c)
+
+/*
+** Encrypt data
+*/
+void			*encrypt_binary(char *binary, int binary_len, char *key)
 {
-	char *ret;
+	int		i = 0;
+    char    *encrypted = NULL;
 
-	ret = ft_strnew(1);
-	ret[0] = c ^ ENCRYPTION_KEY[i % ft_strlen(ENCRYPTION_KEY)];
-	return (ret);
-}
-
-char			*encrypt_message(char *msg)
-{
-	int		i;
-	char	*crypted;
-
-	i = 0;
-	crypted = ft_strnew(0);
-	while (msg[i])
+    if (!(encrypted = (char*)malloc(binary_len)))
+        return (NULL);
+	while (i < binary_len)
 	{
-		crypted = ft_strjoin(crypted, xor_char(i, msg[i]));
-		i++;
+        encrypted[i] = xor_char(i, binary[i], key);
+        i++;
 	}
-	return (ft_strreverse(crypted));
+    return (encrypted);
 }
-
-char			*decrypt_message(char *crypted)
-{
-	int		i;
-	int		n;
-	char	*msg;
-
-	crypted = ft_strreverse(crypted);
-	i = 0;
-	n = 0;
-	msg = ft_strnew(0);
-	while (crypted[n + 1])
-	{
-		msg = ft_strjoin(msg, unxor_char(i,\
-			hexastring_to_int(ft_strsub(crypted, n, 2))));
-		i++;
-		n += 2;
-	}
-	return (msg);
-}*/
 
 /*
 ** Generate a random encryption key
@@ -95,4 +70,5 @@ void            encrypt_src(void *buffer, t_elf *dst, t_elf *src)
 {
     char        *key = generate_encryption_key();
     write_key_to_elf(key, buffer, dst);
+    src->buffer = encrypt_binary(src->buffer, src->len, key);
 }

@@ -13,7 +13,32 @@
 #include "all.h"
 
 /*
-** Generate a random number 
+** Convert int to hexastring
+*/
+char			*int_to_hexastring(char c)
+{
+	char		*res;
+
+	res = ft_itoabase_uint(c, "0123456789ABCDEF");
+	if (ft_strlen(res) < 2)
+		res = ft_strjoin("0", res);
+	return (res);
+}
+
+/*
+** Convert hexastring to int
+*/
+char			hexastring_to_int(char *s)
+{
+	char xor;
+
+	xor = ft_atoi_base(s, 16);
+	ft_strdel(&s);
+	return (xor);
+}
+
+/*
+** Generate a random number
 */
 int			get_rand(int max)
 {

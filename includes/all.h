@@ -24,7 +24,7 @@
 # define bool	int
 # define true	1
 # define false	0
-# define ENCRYPTION_KEY_LEN 512
+# define ENCRYPTION_KEY_LEN 10
 
 /*
 ** ELF DEFINITION
@@ -191,6 +191,8 @@ void			*ft_mmap(int fd, size_t size);
 void			new_segment(t_elf *elf, struct elf64_phdr *data);
 void			new_section(t_elf *elf, struct elf64_shdr *data, void *buffer);
 int				get_rand(int max);
+char			*int_to_hexastring(char c);
+char			hexastring_to_int(char *s);
 
 /*
 **	ELF
